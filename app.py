@@ -39,7 +39,7 @@ def add():
         else:
             return '{"Result": "Error"}'
     except Exception as e:
-        return '{"Result": "Error"}'
+        return '{"Result": "Error", "Message": "' + str(e) + '"}'
 
 @app.route("/update", methods=['PUT'])  # Update Student
 def update():
@@ -47,13 +47,15 @@ def update():
     name = request.json.get('name')
     email = request.json.get('email')
     try:
+
+
         query = '''UPDATE students SET studentName = '{}', email = '{}' WHERE studentID = {} ;'''.format(name, email, id)
         print("Received Update Request. ID:", id, "Name:", name, "Email:", email)
         success = execute_query(query)
         print(success)
         return '{"Result": "Success"}'
     except Exception as e:
-        return '{"Result": "Error"}'
+        return '{"Result": "Error", "Message": "' + str(e) + '"}'
 
 @app.route("/delete", methods=['DELETE'])  # Delete Student
 def delete():
@@ -63,8 +65,9 @@ def delete():
         success = execute_query(query)
         print(success)
         return '{"Result": "Success"}'
+
     except Exception as e:
-        return '{"Result": "Error"}'
+        return '{"Result": "Error", "Message": "' + str(e) + '"}'
 
 
 @app.route("/default")  # Default - Show Data
@@ -88,11 +91,15 @@ def read():
         )
         return ret
     except Exception as e:
-        return '{"Result": "Error"}'
+        return '{"Result": "Error", "Message": "' + str(e) + '"}'
     
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+if _name_ == "_main_":
+    app.run(host='0.0.0.0', port='8080')
 
 
 if _name_ == "_main_":
